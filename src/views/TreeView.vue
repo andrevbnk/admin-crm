@@ -1,50 +1,116 @@
 <template>
-	<div class="container">
-		<vue-tree
-			style="width: 100%; height: 2000px; border: 1px solid gray"
-			:dataset="dialog"
-			:config="treeConfig"
-			linkStyle="straight"
-			direction="vertical"
-		>
-			<template v-slot:node="{ node, collapsed }">
-				<v-card
-					class="mx-2"
-					max-width="344"
-					outlined
-					shaped
-					margin="10"
-					:style="{ border: collapsed ? '2px solid grey' : '' }"
-				>
-					<v-list-item three-line>
-						<v-list-item-content>
-							<v-list-item-title class="text-h5 mb-1">
-								<v-textarea
-									clear-icon="mdi-close-circle"
-									label="Title"
-									no-resize
-									auto-grow
-									rows="1"
-									@click.stop=""
-									:value="node.name"
-								></v-textarea>
+	<div class="wrap" @wheel.prevent="zoomWheel">
+		<div class="group-button">
+			<v-btn class="mx-2" icon fab @click="zoomIn">
+				<v-icon large dark> mdi-magnify-plus-outline </v-icon>
+			</v-btn>
 
-							</v-list-item-title>
-							<v-list-item-subtitle class="m-1">
-								<v-textarea
-									label="description"
-									no-resize
-									auto-grow
-									rows="3"
-									@click.stop=""
-									:value="node.description"
-								></v-textarea>
-							</v-list-item-subtitle>
-						</v-list-item-content>
-					</v-list-item>
-				</v-card>
-			</template>
-		</vue-tree>
+			<v-btn class="mx-2" icon fab @click="zoomOut">
+				<v-icon large dark> mdi-magnify-minus-outline </v-icon>
+			</v-btn>
+
+			<v-btn class="mx-2" icon fab @click="restore">
+				<v-icon color="black" large dark> mdi-restore </v-icon>
+			</v-btn>
+
+			<v-btn
+				class="mx-2"
+				color="blue"
+				fab
+				@click="saveDialog"
+				:loading="loading"
+				:disabled="loading"
+			>
+				<v-icon color="white"> mdi-cloud-upload </v-icon>
+			</v-btn>
+		</div>
+		<keep-alive>
+			<vue-tree
+				style="width: 80vw; height: 90vh;"
+				:dataset="dialog"
+				:config="treeConfig"
+				linkStyle="straight"
+				direction="vertical"
+				:collapse-enabled="true"
+				ref="tree"
+				:key="treeConfig.forceUpdateKey"
+			>
+				<template v-slot:node="{ node, collapsed }">
+					<v-card
+						class="mx-6"
+						min-width="400"
+						outlined
+						shaped
+						:color="`${
+							node.children
+								? node.children.length
+									? 'grey lighten-4'
+									: ''
+								: 'grey lighten-4'
+						}`"
+						:style="{ border: collapsed ? '2px solid grey' : '' }"
+					>
+						<v-list-item three-line class="body-card">
+							<v-list-item-content>
+								<v-list-item-title class="head-textarea text-h1 mb-1">
+									<v-textarea
+										clear-icon="mdi-close-circle"
+										spellcheck="false"
+										no-resize
+										auto-grow
+										rows="1"
+										v-model="node.name"
+										@click.stop=""
+										@mousedown.stop=""
+										style="
+											font-size: 65px;
+											font-weight: bold;
+										"
+									></v-textarea>
+								</v-list-item-title>
+								<v-list-item-subtitle class="body-textarea m-1">
+									<v-textarea
+										no-resize
+										auto-grow
+										spellcheck="false"
+										rows="3"
+										@click.stop=""
+										@mousedown.stop=""
+										style="font-size: 30px"
+										v-model="node.description"
+									></v-textarea>
+								</v-list-item-subtitle>
+							</v-list-item-content>
+						</v-list-item>
+
+						<v-card-actions>
+							<v-spacer></v-spacer>
+
+							<v-btn
+								@click.stop="deleteNode(dialog, node.id)"
+								dark
+								text
+								color="error"
+								rounded
+							>
+								<v-icon large dark>mdi-minus</v-icon>
+							</v-btn>
+
+							<v-btn
+								@click.stop="addNode(node)"
+								dark
+								text
+								color="success"
+								large
+								class="rounded-plus"
+							>
+								<v-icon x-large>mdi-plus</v-icon>
+							</v-btn>
+						</v-card-actions>
+					</v-card>
+				</template>
+			</vue-tree>
+		</keep-alive>
 	</div>
 </template>
 <script>
@@ -371,22 +437,126 @@ export default {
 				],
 				identifier: "id",
 			},
-			treeConfig: { nodeWidth: 330, nodeHeight: 200, levelHeight: 450 },
+			currentScale: 1,
+			treeConfig: {
+				nodeWidth: 600,
+				nodeHeight: 400,
+				levelHeight: 1200,
+				forceUpdateKey: 0,
+			},
+			loading: false,
 		};
+	},
+
+	mounted: function () {
+		this.$nextTick(() => {
+			this.$refs.tree.setScale(0.4);
+		});
+		this.$refs.tree.setScale(0.4);
+	},
+
+	methods: {
+		zoomOut: function () {
+			this.$refs.tree.zoomOut();
+			this.currentScale = this.$refs.tree.currentScale;
+		},
+		zoomIn: function () {
+			this.$refs.tree.zoomIn();
+			this.currentScale = this.$refs.tree.currentScale;
+		},
+		restore: function () {
+			this.$refs.tree.setScale(0.4);
+			this.currentScale = this.$refs.tree.currentScale;
+		},
+
+		zoomWheel: function (e) {
+			return e.deltaY > 0 ? this.zoomOut() : this.zoomIn();
+		},
+
+		getIncId(tree) {
+			let max = 0;
+			function recurSearch(nodes) {
+				for (let node of nodes) {
+					if (node.id > max) {
+						max = node.id;
+					}
+					if (node.children?.length) {
+						recurSearch(node.children);
+					}
+				}
+			}
+			recurSearch(tree);
+			return max + 1;
+		},
+		deleteNode(tree, id) {
+			function recurSearch(nodes) {
+				nodes.children = nodes.children?.filter((childNode) => {
+					if (childNode.children?.length) {
+						recurSearch(childNode);
+					}
+					return childNode.id !== id;
+				});
+			}
+			recurSearch(tree);
+			this.$refs.tree.draw();
+		},
+
+		addNode(node) {
+			const defaultNode = {
+				id: this.getIncId(this.dialog.children),
+				name: "",
+				description: "",
+				attachments: [],
+				children: [],
+			};
+
+			node.children.push(defaultNode);
+
+			// this.treeConfig.forceUpdateKey += 1;
+			this.$nextTick(() => {
+				this.$refs.tree.setScale(this.currentScale);
+				this.$refs.tree.buildTree(this.dialog);
+				// this.$refs.tree.draw(this.dialog);
+
+				// console.log(this.$refs.tree);
+			});
+		},
+
+		saveDialog() {
+			this.loading = true;
+			setTimeout(() => (this.loading = false), 2000);
+			// axios.patch('/saveDialog',this.dialog);
+		},
 	},
 };
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss">
 $primary: #11998e;
 $secondary: #38ef7d;
 $white: #fff;
 $gray: #9b9b9b;
 
-.container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+.rounded-plus {
+	border-radius: 10px 1px 10px 1px;
+}
+
+.group-button {
+	position: absolute;
+	margin: 35px;
+	z-index: 2;
+}
+.body-textarea .v-textarea textarea {
+	line-height: 60px !important;
+	font-family: 'Lucida Sans Unicode', sans-serif;
+}
+
+.head-textarea .v-textarea textarea {
+	line-height: 60px !important;
+	font-family: 'Сomic Sans MS', cursive;
+}
+.wrap {
+	margin: 5px 30px auto;
 }
 </style>
