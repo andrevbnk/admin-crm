@@ -511,14 +511,13 @@ export default {
 			};
 
 			node.children.push(defaultNode);
+			this.treeConfig.forceUpdateKey += 1; // IDK why not working((((
 
-			// this.treeConfig.forceUpdateKey += 1;
+			this.$refs.tree.draw();
+			
 			this.$nextTick(() => {
 				this.$refs.tree.setScale(this.currentScale);
-				this.$refs.tree.buildTree(this.dialog);
-				// this.$refs.tree.draw(this.dialog);
-
-				// console.log(this.$refs.tree);
+				console.log(this.$refs.tree);
 			});
 		},
 
