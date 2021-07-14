@@ -25,4 +25,7 @@ export default {
 
 
 <style lang="scss">
+a{
+	text-decoration: none;
+}
 </style>
