@@ -1,24 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import TreeView from '../views/TreeView.vue'
+import FolderTree from '../views/FolderTree.vue'
+
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/tree',
+    name: 'Tree',
+    component: TreeView
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/folder-tree',
+    name: 'Tree',
+    component: FolderTree
+  },
+//   {
+//     path: '/about',
+//     name: 'About',
+//     // route level code-splitting
+//     // this generates a separate chunk (about.[hash].js) for this route
+//     // which is lazy-loaded when the route is visited.
+//     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+//   }
 ]
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes
 })
 
