@@ -10,14 +10,14 @@
 				@click.stop="drawer = !drawer"
 			></v-app-bar-nav-icon>
 			<v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-				<span class="hidden-sm-and-down">Admin Panel</span>
+				<span class="hidden-sm-and-down">Панель адміністратор </span>
 			</v-toolbar-title>
 			<v-text-field
 				flat
 				solo-inverted
 				hide-details
 				prepend-inner-icon="mdi-magnify"
-				label="Search"
+				label="Глобальний пошук..."
 				class="hidden-sm-and-down"
 			></v-text-field>
 			<v-spacer></v-spacer>
@@ -47,7 +47,7 @@
 							</v-subheader>
 						</v-col>
 						<v-col cols="6" class="text-center">
-							<a href="#!" class="body-2 black--text">EDIT</a>
+							<a href="#!" class="body-2 black--text">Редагувати</a>
 						</v-col>
 					</v-row>
 					<v-list-group
@@ -104,8 +104,8 @@ export default {
 		return {
 			drawer: null,
 			items: [
-				{ icon: "mdi-account", text: "Profile", link: "/profile" },
-				{ icon: "mdi-history", text: "History", link: "/history" },
+				{ icon: "mdi-account", text: "Профiль", link: "/profile" },
+				{ icon: "mdi-history", text: "Iсторiя", link: "/history" },
 				{
 					icon: "mdi-chevron-down",
 					"icon-alt": "mdi-telegram",
@@ -114,12 +114,12 @@ export default {
 					children: [
 						{
 							icon: "mdi-folder-network-outline",
-							text: "Folder Tree",
+							text: "Дерево папок",
 							link: "/folder-tree",
 						},
 						{
 							icon: "mdi-family-tree",
-							text: "Tree",
+							text: "Дерево",
 							link: "/tree",
 						},
 					],

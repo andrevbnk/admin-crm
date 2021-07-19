@@ -1,28 +1,43 @@
 <template>
 	<div class="wrap" @wheel.prevent="zoomWheel">
 		<div class="group-button">
-			<v-btn class="mx-2" icon fab @click="zoomIn">
-				<v-icon large dark> mdi-magnify-plus-outline </v-icon>
-			</v-btn>
+			<v-col class="flex">
+				<v-btn class="mx-2" icon fab @click="zoomIn">
+					<v-icon large dark> mdi-magnify-plus-outline </v-icon>
+				</v-btn>
 
-			<v-btn class="mx-2" icon fab @click="zoomOut">
-				<v-icon large dark> mdi-magnify-minus-outline </v-icon>
-			</v-btn>
+				<v-btn class="mx-2" icon fab @click="zoomOut">
+					<v-icon large dark> mdi-magnify-minus-outline </v-icon>
+				</v-btn>
+			</v-col>
 
-			<v-btn class="mx-2" icon fab @click="restore">
+			<v-col class="tool-button d-flex justify-end mx-16">
+
+				<v-btn
+									class="white--text mx-3"
+									color="green darken-1"
+									depressed
+									large
+									@click="downloadJson(tree)"
+								>
+								Save
+									<v-icon right> mdi-content-save </v-icon>
+								</v-btn>
+
+				<v-btn
+					class="mx-2"
+					fab
+					x-small
+					color="white"
+					@click="resetTree()"
+				>
+					<v-icon color="black" dark> mdi-restore </v-icon>
+				</v-btn>
+			</v-col>
+
+			<!-- <v-btn class="mx-2" icon fab @click="restore">
 				<v-icon color="black" large dark> mdi-restore </v-icon>
-			</v-btn>
-
-			<v-btn
-				class="mx-2"
-				color="blue"
-				fab
-				@click="uploadToServer"
-				:loading="loading"
-				:disabled="loading"
-			>
-				<v-icon color="white"> mdi-cloud-upload </v-icon>
-			</v-btn>
+			</v-btn> -->
 		</div>
 		<keep-alive>
 			<vue-tree
@@ -118,15 +133,14 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import { deleteNode,getDefaultNode } from '@/util/recurTree';
-
+import { deleteNode, getDefaultNode } from "@/util/recurTree";
 export default {
 	name: "treemap",
 
 	data() {
 		return {
 			tree: {},
-			refTree:'',
+			refTree: "",
 			defaultTree: {},
 			currentScale: 1,
 			treeConfig: {
@@ -142,18 +156,18 @@ export default {
 	created: function () {
 		this.getTree().then((tree) => {
 			this.tree = tree;
-			this.defaultTree = tree;
+			this.defaultTree = JSON.parse(JSON.stringify(tree));
 			this.treeConfig.forceUpdateKey += 1;
 
 			this.$nextTick(() => {
 				this.restore();
 			});
-				this.restore();
+			this.restore();
 		});
 	},
 
 	methods: {
-		...mapActions(["getTree", "saveTree"]),
+		...mapActions(["getTree", "saveTree",'downloadJson']),
 		zoomOut: function () {
 			this.$refs.tree.zoomOut();
 			this.currentScale = this.$refs.tree.currentScale;
@@ -172,21 +186,27 @@ export default {
 		},
 
 		addNode(node) {
-			node.children.push(this.$refs.tree.addUniqueKey(getDefaultNode(this.tree)));
+			node.children.push(
+				this.$refs.tree.addUniqueKey(getDefaultNode(this.tree))
+			);
 			this.$refs.tree.draw();
 		},
 
-		deleteNode(tree, id){
+		deleteNode(tree, id) {
 			this.tree = deleteNode(tree, id);
 			this.$refs.tree.draw();
 		},
 
-		uploadToServer() {
-			this.loading = true;
-			this.saveTree().then(() => {
-				this.loading = false;
+	
+		resetTree: function () {
+			this.tree = JSON.parse(JSON.stringify(this.defaultTree));
+			this.$refs.tree.draw();
+			this.treeConfig.forceUpdateKey += 1;
+
+			this.$nextTick(() => {
+				this.restore();
 			});
-			// axios.patch('/saveDialog',this.tree);
+			this.restore();
 		},
 	},
 };
@@ -203,10 +223,16 @@ $gray: #9b9b9b;
 	border-radius: 10px 1px 10px 1px;
 }
 
+.tool-button {
+	align-self: end;
+}
 .group-button {
+	display: flex;
+	justify-content: space-between;
 	position: absolute;
 	margin: 35px;
 	z-index: 2;
+	width: 100%;
 }
 .body-textarea .v-textarea textarea {
 	line-height: 60px !important;

@@ -333,7 +333,7 @@ export default new Vuex.Store({
 		return new Promise((resolve)=>{
 			setTimeout(() => {
 				resolve(mockData)
-			}, 2000);
+			}, 10);
 		})
 	},
 
@@ -342,8 +342,25 @@ export default new Vuex.Store({
 		return new Promise((resolve)=>{
 			setTimeout(() => {
 				resolve(true);
-			}, 2000);
+			}, 10);
 		});
+	},
+
+	downloadJson({commit},tree) {
+		console.log(commit);
+		const json = JSON.stringify(tree);
+		let blob = new Blob([json], {
+			type: "application/json",
+		}); // 2. Get the blob setting file type in the response object returned by the request. Here is excel as an example.
+		let url = window.URL.createObjectURL(blob); // 3. Create a temporary url pointing to the blob object
+	
+		// 4. After creating the url, you can simulate a series of operations on this file object, for example: preview, download
+		let a = document.createElement("a");
+		a.href = url;
+		a.download = "Dialog Tree.json";
+		a.click();
+		// 5. Release this temporary object url
+		window.URL.revokeObjectURL(url);
 	}
   },
   modules: {

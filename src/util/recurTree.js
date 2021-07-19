@@ -30,9 +30,10 @@ const deleteNode = (tree, id) => {
 };
 
 const getDefaultNode = (tree) => {
+	const nodeId = getIncId(tree.children);
 	return {
-		id: getIncId(tree.children),
-		name: "Title",
+		id: nodeId,
+		name: `Заголовок ${nodeId}`,
 		description: "",
 		attachments: [],
 		children: [],

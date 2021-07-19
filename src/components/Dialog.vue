@@ -2,7 +2,7 @@
 	<div>
 		<v-btn
 			bottom
-			color="pink"
+			color="teal"
 			dark
 			fab
 			fixed
@@ -14,7 +14,7 @@
 		<v-dialog v-model="dialog" width="800px">
 			<v-card>
 				<v-card-title class="grey darken-2">
-					Create contact
+					Виникли питання?
 				</v-card-title>
 				<v-container>
 					<v-row class="mx-2">
@@ -29,19 +29,8 @@
 										alt=""
 									/>
 								</v-avatar>
-								<v-text-field placeholder="Name"></v-text-field>
+								<v-text-field placeholder="Iм'я"></v-text-field>
 							</v-row>
-						</v-col>
-						<v-col cols="6">
-							<v-text-field
-								prepend-icon="mdi-account-card-details-outline"
-								placeholder="Company"
-							></v-text-field>
-						</v-col>
-						<v-col cols="6">
-							<v-text-field
-								placeholder="Job title"
-							></v-text-field>
 						</v-col>
 						<v-col cols="12">
 							<v-text-field
@@ -59,18 +48,16 @@
 						<v-col cols="12">
 							<v-text-field
 								prepend-icon="mdi-text"
-								placeholder="Notes"
+								placeholder="Примiтки"
 							></v-text-field>
 						</v-col>
 					</v-row>
 				</v-container>
 				<v-card-actions>
-					<v-btn text color="primary">More</v-btn>
-					<v-spacer></v-spacer>
 					<v-btn text color="primary" @click="dialog = false"
-						>Cancel</v-btn
+						>Вiдмiнити</v-btn
 					>
-					<v-btn text @click="dialog = false">Save</v-btn>
+					<v-btn text @click="dialog = false">Вiдправити</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
