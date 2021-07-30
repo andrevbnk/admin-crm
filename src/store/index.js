@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+import createPersistedState from "vuex-persistedstate";
+import auth from '@/modules/auth';
+
+Vue.use(Vuex);
+
+const authState = createPersistedState({
+	paths:['auth'],
+})
+
 
 export default new Vuex.Store({
   state: {
@@ -347,5 +355,7 @@ export default new Vuex.Store({
 	}
   },
   modules: {
-  }
+	auth,
+  },
+  plugins: [authState],
 })

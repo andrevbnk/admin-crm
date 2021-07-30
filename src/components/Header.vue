@@ -99,13 +99,17 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
+
+
 export default {
 	data: function () {
 		return {
 			drawer: null,
 			items: [
-				{ icon: "mdi-account", text: "Profile", link: "/profile" },
-				{ icon: "mdi-history", text: "History", link: "/history" },
+				{ icon: "mdi-account-cowboy-hat", text: "Профiль", link: "/profile" },
+				{ icon: "mdi-history", text: "Iсторiя", link: "/history" },
 				{
 					icon: "mdi-chevron-down",
 					"icon-alt": "mdi-telegram",
@@ -132,6 +136,13 @@ export default {
 			],
 		};
 	},
+
+	computed: {
+    ...mapGetters([
+      'isAuthenticated',
+    ])
+  }
+
 };
 </script>
 
