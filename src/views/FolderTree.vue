@@ -169,12 +169,9 @@
 
 <script>
 import { mapActions } from "vuex";
-import FileTree from "@/components/Tree/FileTree";
 
 export default {
-	components: {
-		FileTree,
-	},
+
 	data: function () {
 		return {
 			tree: {},
