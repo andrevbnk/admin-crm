@@ -99,6 +99,10 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
+
+
 export default {
 	data: function () {
 		return {
@@ -132,6 +136,13 @@ export default {
 			],
 		};
 	},
+
+	computed: {
+    ...mapGetters([
+      'isAuthenticated',
+    ])
+  }
+
 };
 </script>
 

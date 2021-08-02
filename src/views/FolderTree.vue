@@ -6,7 +6,7 @@
 					<v-sheet class="pa-6 primary lighten-2">
 						<v-text-field
 							v-model="search"
-							label="Пошук по заголовку..."
+							label="По заголовку..."
 							:append-icon="
 								caseSensitive
 									? 'mdi-alphabetical-variant'
@@ -26,7 +26,7 @@
 					<v-sheet class="pa-6 primary lighten-2" height="100%">
 						<v-text-field
 							v-model="search"
-							label="Пошук по id..."
+							label="По id..."
 							dark
 							flat
 							solo-inverted
@@ -38,8 +38,8 @@
 				</v-col>
 			</v-row>
 
-			<v-row class="pa-4" justify="space-between">
-				<v-col cols="5">
+			<v-row class="py-4 px-1" justify="space-between">
+				<v-col xs="12" sm="12" cols="12" md="5">
 					<v-treeview
 						:active.sync="active"
 						:items="[tree]"
@@ -65,12 +65,12 @@
 
 						<template v-slot:label="{ item }">
 							<v-hover v-slot="{ hover }">
-								<div class="item-node">
-									<span class="item-text">
+								<div class="item-node w-40">
+									<span class="item-text text-truncate">
 										{{ item.name }}
 									</span>
 
-									<div v-if="hover">
+									<div v-if="hover || item.id == (selected?selected.id:false)">
 										<v-btn
 											v-for="(icon, index) in icons"
 											:key="index"
@@ -92,7 +92,7 @@
 						</template>
 					</v-treeview>
 
-					<v-card-actions>
+					<v-card-actions class="my-3">
 						<v-btn
 							class="mx-2"
 							fab
@@ -137,7 +137,8 @@
 							:key="selected.id"
 							class="pt-6 mx-auto"
 							flat
-							min-width="600"
+							min-width="300"
+							width="60%"
 						>
 							<v-textarea
 								name="input-7-4"
