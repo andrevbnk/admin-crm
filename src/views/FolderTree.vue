@@ -99,7 +99,7 @@
 							depressed
 							@click="downloadJson(tree)"
 						>
-							Save
+							Завантажити
 							<v-icon right> mdi-content-save </v-icon>
 						</v-btn>
 					</v-card-actions>
