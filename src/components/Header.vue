@@ -11,21 +11,15 @@
         <span class="hidden-sm-and-down">Панель адміністратор </span>
       </v-toolbar-title>
 
-      <!-- <v-text-field
-				flat
-				solo-inverted
-				hide-details
-				prepend-inner-icon="mdi-magnify"
-				label="Глобальний пошук..."
-				class="hidden-sm-and-down"
-			></v-text-field>
+     
 			<v-spacer></v-spacer>
-			<v-btn icon>
-				<v-icon>mdi-apps</v-icon>
+      <div class="mr-10">
+        <v-icon class="mr-1">mdi-account</v-icon>
+        {{StateUser.userName}}
+      </div>
+			<v-btn icon @click.stop="AUTH_LOGOUT">
+				<v-icon>mdi-logout</v-icon>
 			</v-btn>
-			<v-btn icon>
-				<v-icon>mdi-bell</v-icon>
-			</v-btn> -->
     </v-app-bar>
 
     <v-navigation-drawer
@@ -92,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data: function () {
@@ -127,8 +121,12 @@ export default {
     };
   },
 
+  methods:{
+    ...mapActions(["AUTH_LOGOUT"]),
+  },
+
   computed: {
-    ...mapGetters(["isAuthenticated"]),
+    ...mapGetters(["isAuthenticated","StateUser"]),
   },
 };
 </script>

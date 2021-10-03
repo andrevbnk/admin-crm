@@ -15,13 +15,12 @@ const actions = {
     async AUTH_LOGIN({commit}, User) {
 		try{
 			const res = await axios.post('/auth/login', User);
-			console.log(res);
 			
-			await commit('SetUser', res.data);
 			axios.defaults.headers.common['x-access-token'] = res.data.token;
 			axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+			await commit('SetUser', res.data);
             
-			router.push({ name: 'TreeView'});
+			router.push({ name: 'TreeView'}).catch(()=>{});
 
 			return true;
 		} catch(e){
@@ -50,7 +49,6 @@ const mutations = {
         delete axios.defaults.headers.common['x-access-token'];
         delete axios.defaults.headers.common['Authorization'];
         state.user = null;
-        state.token = null;
     },
 };
 export default {
