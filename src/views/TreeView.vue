@@ -2,13 +2,7 @@
 	<div class="wrap" @wheel.prevent="zoomWheel">
 		<div class="group-button">
 			<v-col class="flex">
-				<v-btn class="mx-2" icon fab @click="zoomIn">
-					<v-icon large dark> mdi-magnify-plus-outline </v-icon>
-				</v-btn>
-
-				<v-btn class="mx-2" icon fab @click="zoomOut">
-					<v-icon large dark> mdi-magnify-minus-outline </v-icon>
-				</v-btn>
+			
 			</v-col>
 
 			<v-col class="tool-button d-flex justify-end mx-16">
@@ -20,7 +14,7 @@
 									large
 									@click="downloadJson(tree)"
 								>
-								Save
+								Завантажити
 									<v-icon right> mdi-content-save </v-icon>
 								</v-btn>
 

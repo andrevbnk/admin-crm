@@ -55,4 +55,40 @@ const getNodeById = (tree,id) => {
 	return findedNode;
 };
 
-export {getDefaultNode,deleteNode, getNodeById}
+const mapShortToLong = new Map([
+    ["options", "children"],
+	["children", "options"],
+    // ["d",  "data"],
+]);
+
+
+function refit_keys(o){
+    // Only handle non-null objects
+    if (o === null || typeof o !== "object") {
+        return o;
+    }
+
+    // Handle array just by handling their contents
+    if (Array.isArray(o)) {
+        return o.map(refit_keys);
+    }
+
+    const build = {};
+    for (const key in o) {
+        // Get the destination key
+        const destKey = mapShortToLong.get(key) || key;
+
+        // Get the value
+        let value = o[key];
+
+        // If this is an object, recurse
+        if (typeof value === "object") {
+            value = refit_keys(value);
+        }
+
+        // Set it on the result using the destination key
+        build[destKey] = value;
+    }
+    return build;
+}
+export { getDefaultNode, deleteNode, getNodeById, refit_keys }

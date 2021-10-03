@@ -7,13 +7,14 @@ import VueTree from '@ssthouse/vue-tree-chart'
 import axios from 'axios';
 
 const user = store.state.auth.user;
-if (user && user?.accessToken) {
-	axios.defaults.headers.common['x-access-token'] = user.accessToken;
+if (user && user?.token) {
+	axios.defaults.headers.common['x-access-token'] = user.token;
+	axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 }
 
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:3002/';
+axios.defaults.baseURL = 'http://164.90.190.73:5000/';
 
 
 axios.interceptors.response.use(

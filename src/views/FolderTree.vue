@@ -6,6 +6,7 @@
 					<v-sheet class="pa-6 primary lighten-2">
 						<v-text-field
 							v-model="search"
+							style="width:50%; margin:0 auto;"
 							label="По заголовку..."
 							:append-icon="
 								caseSensitive
@@ -22,20 +23,7 @@
 						></v-text-field>
 					</v-sheet>
 				</v-col>
-				<v-col class="pa-0">
-					<v-sheet class="pa-6 primary lighten-2" height="100%">
-						<v-text-field
-							v-model="search"
-							label="По id..."
-							dark
-							flat
-							solo-inverted
-							hide-details
-							clearable
-							clear-icon="mdi-close-circle-outline"
-						></v-text-field>
-					</v-sheet>
-				</v-col>
+			
 			</v-row>
 
 			<v-row class="py-4 px-1" justify="space-between">

@@ -10,6 +10,7 @@ const getters = {
     StateUser: state => state.user,
     userId: state => state.user?.id,
 };
+
 const actions = {
     async AUTH_LOGIN({commit}, User) {
 		try{
@@ -17,7 +18,9 @@ const actions = {
 			console.log(res);
 			
 			await commit('SetUser', res.data);
-			axios.defaults.headers.common['x-access-token'] = res.data.accessToken;
+			axios.defaults.headers.common['x-access-token'] = res.data.token;
+			axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+            
 			router.push({ name: 'TreeView'});
 
 			return true;
@@ -44,6 +47,8 @@ const mutations = {
         state.user.username = username;
     },
     LogOut(state){
+        delete axios.defaults.headers.common['x-access-token'];
+        delete axios.defaults.headers.common['Authorization'];
         state.user = null;
         state.token = null;
     },
