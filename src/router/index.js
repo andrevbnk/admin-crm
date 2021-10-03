@@ -13,6 +13,7 @@ const routes = [
 		name: 'TreeView',
 		component: TreeView,
 		meta: { requiresAuth: true },
+		alias: '/'
 	},
 	{
 		path: '/folder-tree',
