@@ -18,22 +18,19 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
-	async getTree() {
+	async TREE_GET() {
 		const result = await axios.get('/dialog');
+		console.log(result);
 		return refit_keys(result.data, 'options', 'children')
 	},
 
 	
-	async saveTree() {
-		// axios.patch('/saveDialog',this.dialog);
-		return new Promise((resolve)=>{
-			setTimeout(() => {
-				resolve(true);
-			}, 10);
-		});
+	async TREE_SAVE() {
+		await axios.patch('/dialog',this.dialog);
+		return true;
 	},
 
-	downloadJson({commit},tree) {
+	TREE_DOWNLOAD({commit},tree) {
 		console.log(commit);
 		const json = JSON.stringify(tree);
 		let blob = new Blob([json], {

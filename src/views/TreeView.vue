@@ -11,13 +11,20 @@
 									class="white--text mx-3"
 									color="green darken-1"
 									depressed
-									large
-									@click="downloadJson(tree)"
+									@click="TREE_DOWNLOAD(tree)"
 								>
 								Завантажити
 									<v-icon right> mdi-content-save </v-icon>
 								</v-btn>
-
+	<v-btn
+							class="white--text"
+							color="blue darken-1"
+							depressed
+							@click="TREE_SAVE(tree)"
+						>
+							На сервер
+							<v-icon right> mdi-cloud-download</v-icon>
+						</v-btn>
 				<v-btn
 					class="mx-2"
 					fab
@@ -148,7 +155,7 @@ export default {
 	},
 
 	created: function () {
-		this.getTree().then((tree) => {
+		this.TREE_GET().then((tree) => {
 			this.tree = tree;
 			this.defaultTree = JSON.parse(JSON.stringify(tree));
 			this.treeConfig.forceUpdateKey += 1;
@@ -161,7 +168,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(["getTree", "saveTree",'downloadJson']),
+		...mapActions(["TREE_GET", "TREE_SAVE",'TREE_DOWNLOAD']),
 		zoomOut: function () {
 			this.$refs.tree.zoomOut();
 			this.currentScale = this.$refs.tree.currentScale;
